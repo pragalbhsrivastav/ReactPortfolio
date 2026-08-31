@@ -1,76 +1,48 @@
-import React from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-
-const responsive = {
-  superLargeDesktop: {
-    breakpoint: { max: 4000, min: 3000 },
-    items: 5,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-  },
-};
+import { marqueeSkills, skillGroups } from '../data/content';
 
 const Skills = () => {
   return (
-    <section className="skill" id="skills">
-      <Container>
-        <Row>
-          <Col>
-            <div className="skill-bx">
-              <h2>Skills</h2>
-              <div className='mt-4'>
-                <Carousel
-                  responsive={responsive}
-                  infinite={true}
-                  className="skill-slider"
-                >
-                  <div className="item" aria-label="HTML">
-                    {/* <img src="" alt="image" /> */}
-                    <h5>HTML</h5>
-                  </div>
-                  <div className="item" aria-label="CSS">
-                    {/* <img src="" alt="image" /> */}
-                    <h5>CSS</h5>
-                  </div>
-                  <div className="item" aria-label="JS">
-                    {/* <img src="" alt="image" /> */}
-                    <h5>Javascript</h5>
-                  </div>
-                  <div className="item" aria-label="typescript">
-                    {/* <img src="" alt="image" /> */}
-                    <h5>Typescript</h5>
-                  </div>
-                  <div className="item" aria-label="reactjs">
-                    {/* <img src="" alt="image" /> */}
-                    <h5>Reactjs</h5>
-                  </div>
-                  <div className="item" aria-label="mUI">
-                    {/* <img src="" alt="image" /> */}
-                    <h5>Material UI</h5>
-                  </div>
-                  <div className="item" aria-label="mUI">
-                    {/* <img src="" alt="image" /> */}
-                    <h5>Bootstrap</h5>
-                  </div>
+    <section id="skills" className="scroll-mt-24 py-24">
+      <div className="shell">
+        <span className="eyebrow">03 — Skills</span>
+        <h2 className="section-title mt-4">Tools I reach for</h2>
 
-                </Carousel>
-              </div>
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {skillGroups.map((group) => (
+            <div key={group.title} className="card card-hover p-6">
+              <h3 className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
+                {group.title}
+              </h3>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <li key={item} className="chip">
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
-          </Col>
-        </Row>
-      </Container>
+          ))}
+        </div>
+      </div>
+
+      {/* Edge-to-edge scrolling strip */}
+      <div
+        aria-hidden
+        className="relative mt-16 flex overflow-hidden border-y border-line py-5
+                   mask-[linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]"
+      >
+        <div className="flex shrink-0 animate-marquee items-center gap-10 pr-10">
+          {[...marqueeSkills, ...marqueeSkills].map((skill, i) => (
+            <span
+              key={`${skill}-${i}`}
+              className="whitespace-nowrap font-mono text-sm text-muted"
+            >
+              {skill}
+              <span className="ml-10 text-line">/</span>
+            </span>
+          ))}
+        </div>
+      </div>
     </section>
   );
 };
