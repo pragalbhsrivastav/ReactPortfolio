@@ -9,7 +9,7 @@ export const profile = {
   role: 'Frontend Developer',
   focus: 'React.js & TypeScript',
   location: 'Gurugram, Haryana',
-  email: 'shaineysrivastav@gmail.com',
+  email: 'shaineyshrivastava@gmail.com',
   phone: '+91 75638 02474',
   linkedin: 'https://www.linkedin.com/in/pragalbh-srivastav-762a95189',
   github: 'https://github.com/pragalbhad',
