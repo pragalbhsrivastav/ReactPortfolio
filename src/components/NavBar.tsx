@@ -1,58 +1,134 @@
-import { Container, Nav, Navbar } from "react-bootstrap"
-import React, { useEffect, useState } from 'react';
-import logo from '../logo.svg';
-import { Github, Linkedin } from 'react-bootstrap-icons';
+import { useEffect, useState } from 'react';
+import { Github, Linkedin, List, X } from 'react-bootstrap-icons';
+import { navLinks, profile } from '../data/content';
 
 export const NavBar: React.FC = () => {
+  const [activeLink, setActiveLink] = useState('home');
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-    const [activeLink, setActiveLink] = useState('home')
-    const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
+  // Highlight the nav item for whichever section is currently in view.
+  useEffect(() => {
+    const sections = navLinks
+      .map((l) => document.getElementById(l.id))
+      .filter((el): el is HTMLElement => el !== null);
 
-    useEffect(()=>{
-        const onScroll = () => {
-            if(window.scrollY > 50){
-                setScrolled(true)
-            }else{
-                setScrolled(false)
-            }
-        }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setActiveLink(visible.target.id);
+      },
+      { rootMargin: '-45% 0px -45% 0px', threshold: [0, 0.25, 0.5, 1] }
+    );
 
-        window.addEventListener('scroll', onScroll)
+    sections.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
-        return()=> window.removeEventListener("scroll", onScroll)
+  return (
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'border-b border-line bg-ink/80 py-3 backdrop-blur-xl'
+          : 'border-b border-transparent py-5'
+      }`}
+    >
+      <nav className="shell flex items-center justify-between">
+        <a href="#home" className="group flex items-center gap-2.5">
+          <span className="grid h-9 w-9 place-items-center rounded-lg bg-linear-to-br from-accent to-accent-2 font-mono text-sm font-bold text-white">
+            P
+          </span>
+          <span className="font-mono text-sm tracking-tight text-white">
+            pragalbh<span className="text-accent">.dev</span>
+          </span>
+        </a>
 
-    },[])
+        <ul className="hidden items-center gap-1 md:flex">
+          {navLinks.map((link) => (
+            <li key={link.id}>
+              <a
+                href={`#${link.id}`}
+                className={`rounded-lg px-3.5 py-2 text-sm transition-colors ${
+                  activeLink === link.id
+                    ? 'text-white'
+                    : 'text-muted hover:text-soft'
+                }`}
+              >
+                {link.label}
+                {activeLink === link.id && (
+                  <span className="mx-auto mt-1 block h-px w-4 bg-accent" />
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
 
-    const onUpdateActiveLink = (value: string) => {
-        setActiveLink(value)
-    }
+        <div className="flex items-center gap-2">
+          <a
+            href={profile.linkedin}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="LinkedIn"
+            className="grid h-9 w-9 place-items-center rounded-lg border border-line text-muted transition-colors hover:border-accent/50 hover:text-white"
+          >
+            <Linkedin size={15} />
+          </a>
+          <a
+            href={profile.github}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub"
+            className="grid h-9 w-9 place-items-center rounded-lg border border-line text-muted transition-colors hover:border-accent/50 hover:text-white"
+          >
+            <Github size={15} />
+          </a>
+          <a
+            href="#contact"
+            className="hidden rounded-lg bg-white px-4 py-2 text-sm font-medium text-ink transition-opacity hover:opacity-90 sm:block"
+          >
+            Get in touch
+          </a>
+          <button
+            type="button"
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            className="grid h-9 w-9 place-items-center rounded-lg border border-line text-soft md:hidden"
+          >
+            {menuOpen ? <X size={18} /> : <List size={18} />}
+          </button>
+        </div>
+      </nav>
 
-    return (
-        <Navbar expand="lg" className={scrolled? "scrolled": ""}>
-            <Container>
-                {/* <Navbar.Brand href="#home">
-                   <span className="logo-text"> Logo</span>
-                </Navbar.Brand> */}
-                
+      {menuOpen && (
+        <div className="shell mt-3 md:hidden">
+          <ul className="card divide-y divide-line overflow-hidden">
+            {navLinks.map((link) => (
+              <li key={link.id}>
+                <a
+                  href={`#${link.id}`}
+                  onClick={() => setMenuOpen(false)}
+                  className={`block px-4 py-3 text-sm ${
+                    activeLink === link.id ? 'text-white' : 'text-muted'
+                  }`}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </header>
+  );
+};
 
-                <Navbar.Collapse id="basic-navbar-nav">
-                    
-                    <Nav className="me-auto">
-                        <Nav.Link href="#home" className={activeLink === 'home'? 'active navbar-link': 'navbar-link'} onClick={()=> onUpdateActiveLink('home')}>Home</Nav.Link>
-                        <Nav.Link href="#skills" className={activeLink === 'skills'? 'active navbar-link': 'navbar-link'} onClick={()=> onUpdateActiveLink('skills')}>Skills</Nav.Link>
-                        <Nav.Link href="#projects" className={activeLink === 'projects'? 'active navbar-link': 'navbar-link'} onClick={()=> onUpdateActiveLink('projects')}>Projects</Nav.Link>
-                    </Nav>
-
-                    <span className="navbar-text">
-                        <div className="social-icon">
-                            <a href="#" onClick={() => window.open("https://www.linkedin.com/in/pragalbh-srivastav-762a95189", "_blank")}><Linkedin fill="#fff"/></a>
-                            <a href="#" onClick={() => window.open("https://github.com/pragalbhad", "_blank")}><Github /></a>
-                        </div>
-                        {/* <button className="vvd" onClick={() => console.log('connect')}><span>Lets connect</span></button> */}
-                    </span>
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
-    )
-}
+export default NavBar;

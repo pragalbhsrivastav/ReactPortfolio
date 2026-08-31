@@ -1,83 +1,92 @@
-import React from 'react'
-import { Col, Container, Nav, Row, Tab } from 'react-bootstrap'
-import ProjectCard from './projectCard'
-import logo from '../logo.svg';
-import DonarConceriage from '../assets/img/DonarConceriage.png'
-import CleaverEducationSolutions from '../assets/img/CleaverEducationSolutions.png'
-import josaa from '../assets/img/josaa.png';
-import Fridayyai from '../assets/img/Fridayyai.png';
-import DIMS from '../assets/img/DIMS.png';
+import { useState } from 'react';
+import ProjectCard from './projectCard';
+import { enterpriseProjects, liveProjects } from '../data/content';
+
+type Tab = 'live' | 'enterprise';
 
 const Projects = () => {
-    const projects = [
-        {
-            title: 'Josaa Help',
-            // description: 'JoSAA Help is a platform that helps students find the right college based on their JEE Mains and Advanced ranks. It offers state-wise filtering, tailored recommendations, and tools to compare colleges side-by-side. Students can analyze closing rank trends using customizable charts and graphs. With JoSAA Help, make confident and data-driven college decisions!',
-            imgUrl: josaa,
-            link: 'https://josaa-aegeg3u10-pragalbhs-projects-0805328a.vercel.app/'
-        },
-        {
-            title: 'Fridayy.ai',
-            // description: 'Fridayy AI is a smart tool for transforming e-commerce content creation. It generates stunning backgrounds, automates dynamic catalog and brochure creation, and creates SEO-friendly product descriptions with just a few keywords. Instantly enhance product photos with AI-powered background removal and studio-quality edits. Elevate your product presentation effortlessly with Fridayy AI!',
-            imgUrl: Fridayyai,
-            link: 'https://app.fridayy.ai/'
-        },
-        {
-            title: 'Donar Conceriage',
-            // description: 'description 1',
-            imgUrl: DonarConceriage,
-            link: 'https://www.donorconcierge.com/'
-        },
-        {
-            title: 'Cleaver Education Solutions',
-            // description: 'description 1',
-            imgUrl: CleaverEducationSolutions,
-            link: 'https://clevereducationsolutions.com/'
-        },
-        
-        {
-            title: 'DIMS',
-            // description: 'description 1',
-            imgUrl: DIMS,
-            link: 'https://dimsservices.com/'
-        },
-    ]
-    return (
-        <section className='project' id="projects">
-            <Container>
-                <Row>
-                    <Col>
-                    <h2>Projects</h2>
-                    {/* <Tab.Container id="projects-tabs" defaultActiveKey="first">
-                        <Nav variant="pills" defaultActiveKey="/home">
-                            <Nav.Item>
-                                <Nav.Link eventKey="first">Tab One</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="second">Tab Two</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="third">Tab Three</Nav.Link>
-                            </Nav.Item>
-                        </Nav> */}
+  const [tab, setTab] = useState<Tab>('live');
 
-                        {/* <Tab.Content className='mt-4'>
-                            <Tab.Pane eventKey={"first"}> */}
-                                <Row className='mt-4'>
-                                    {projects.map((project, index) => (
-                                        <ProjectCard key={index} {...project} />
-                                    ))}
-                                </Row>
-                            {/* </Tab.Pane> */}
+  return (
+    <section id="work" className="scroll-mt-24 py-24">
+      <div className="shell">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <span className="eyebrow">04 — Work</span>
+            <h2 className="section-title mt-4">Selected projects</h2>
+          </div>
 
-                           
-                        {/* </Tab.Content>
-                    </Tab.Container> */}
-                    </Col>
-                </Row>
-            </Container>
-        </section>
-    )
-}
+          <div
+            role="tablist"
+            aria-label="Project category"
+            className="flex gap-1 rounded-xl border border-line bg-raised/60 p-1"
+          >
+            {(
+              [
+                ['live', 'Live sites'],
+                ['enterprise', 'Enterprise'],
+              ] as const
+            ).map(([key, label]) => (
+              <button
+                key={key}
+                role="tab"
+                type="button"
+                aria-selected={tab === key}
+                onClick={() => setTab(key)}
+                className={`rounded-lg px-4 py-2 text-sm transition-colors ${
+                  tab === key
+                    ? 'bg-white text-ink'
+                    : 'text-muted hover:text-soft'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
 
-export default Projects
+        {tab === 'live' ? (
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {liveProjects.map((project) => (
+              <ProjectCard key={project.title} {...project} />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-12 grid gap-5 sm:grid-cols-2">
+            {enterpriseProjects.map((project) => (
+              <article
+                key={project.title}
+                className="card card-hover flex flex-col p-6"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="font-semibold text-white">{project.title}</h3>
+                  <span className="shrink-0 font-mono text-[11px] text-muted">
+                    {project.org}
+                  </span>
+                </div>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
+                  {project.blurb}
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {project.stack.map((tech) => (
+                    <span key={tech} className="chip">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+
+        {tab === 'enterprise' && (
+          <p className="mt-6 text-xs text-muted">
+            Internal platforms — source and live links are not public.
+          </p>
+        )}
+      </div>
+    </section>
+  );
+};
+
+export default Projects;
