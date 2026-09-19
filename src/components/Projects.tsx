@@ -1,3 +1,4 @@
+import { ArrowUpRight } from 'react-bootstrap-icons';
 import { useState } from 'react';
 import ProjectCard from './projectCard';
 import { enterpriseProjects, liveProjects } from '../data/content';
@@ -59,7 +60,22 @@ const Projects = () => {
                 className="card card-hover flex flex-col p-6"
               >
                 <div className="flex items-start justify-between gap-3">
-                  <h3 className="font-semibold text-white">{project.title}</h3>
+                  {project.link ? (
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group/link inline-flex items-center gap-1.5 font-semibold text-white transition-colors hover:text-accent"
+                    >
+                      {project.title}
+                      <ArrowUpRight
+                        size={13}
+                        className="shrink-0 opacity-0 transition-opacity group-hover/link:opacity-100"
+                      />
+                    </a>
+                  ) : (
+                    <h3 className="font-semibold text-white">{project.title}</h3>
+                  )}
                   <span className="shrink-0 font-mono text-[11px] text-muted">
                     {project.org}
                   </span>
@@ -81,7 +97,7 @@ const Projects = () => {
 
         {tab === 'enterprise' && (
           <p className="mt-6 text-xs text-muted">
-            Internal platforms — source and live links are not public.
+            Internal platforms — source and live links are not public unless shown.
           </p>
         )}
       </div>

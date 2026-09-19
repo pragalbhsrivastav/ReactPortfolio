@@ -12,9 +12,9 @@ export const profile = {
   email: 'shaineyshrivastava@gmail.com',
   phone: '+91 75638 02474',
   linkedin: 'https://www.linkedin.com/in/pragalbh-srivastav-762a95189',
-  github: 'https://github.com/pragalbhad',
+  github: 'https://github.com/pragalbhsrivastav',
   resume:
-    'https://drive.google.com/file/d/1e56N47Uh-kvwZnB3t3Hyec45tkk4SOFF/view?usp=sharing',
+    'https://drive.google.com/file/d/1nTcvaIJQRiwgQiVVfotxCSGKWLeubCTr/view?usp=sharing',
   summary:
     'Frontend Developer with 3.6+ years building responsive, high-performance web applications with React.js, TypeScript, Next.js and Redux. I integrate REST APIs, ship reusable component libraries, and debug production issues end to end — currently expanding into backend with Node.js, Express and PostgreSQL.',
 };
@@ -147,6 +147,13 @@ export const liveProjects = [
 ];
 
 export const enterpriseProjects = [
+  {
+    title: 'Mishti — Shopify AI Chat Widget',
+    org: 'Independent / Freelance',
+    link: 'https://www.xn--mfoyou-bua.com/',
+    blurb: 'AI shopping assistant for a Shopify storefront, shipped as a single drop-in script. Built in Preact and bundled as a standalone IIFE with CSS injected at runtime, so the whole widget integrates with one tag and stays isolated from the host theme.',
+    stack: ['Preact', 'TypeScript', 'Vite', 'Tailwind CSS', 'Shopify', 'REST APIs'],
+  },
   {
     title: 'SC2 — Signal Command & Control Center',
     org: 'Bellurbis',

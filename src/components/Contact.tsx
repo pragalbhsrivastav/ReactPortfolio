@@ -23,7 +23,7 @@ const Contact = () => {
     },
     {
       label: 'GitHub',
-      value: 'pragalbhad',
+      value: 'pragalbhsrivastav',
       href: profile.github,
       Icon: Github,
     },
