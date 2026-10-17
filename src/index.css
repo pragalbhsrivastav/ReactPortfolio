@@ -1,25 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #05060a;
-  --color-surface: #0b0d14;
-  --color-raised: #11141d;
-  --color-line: #1e2230;
-  --color-muted: #8b93a7;
-  --color-soft: #c3c9d8;
-  --color-accent: #6d5efc;
-  --color-accent-2: #22d3ee;
+  --color-ink: #1b1b1b;
+  --color-ink-2: #232323;
+  --color-line-dark: #333333;
+  --color-dim: #5c5c5c;
+  --color-paper: #ffffff;
+  --color-paper-2: #f3f3f1;
+  --color-line: #e4e4e1;
+  --color-fog: #c8c8c4;
+  --color-graphite: #6b6b6b;
+  --color-accent: #e5532d;
+  --color-accent-deep: #b93a18;
 
-  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-sans: "Archivo", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  --animate-float: float 7s ease-in-out infinite;
-  --animate-marquee: marquee 38s linear infinite;
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-14px); }
-  }
+  --animate-marquee: marquee 40s linear infinite;
   @keyframes marquee {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
@@ -31,22 +27,22 @@
 
   body {
     margin: 0;
-    background: var(--color-ink);
-    color: var(--color-soft);
+    background: var(--color-paper);
+    color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   ::selection {
-    background: color-mix(in oklab, var(--color-accent) 40%, transparent);
+    background: var(--color-accent);
     color: #fff;
   }
 
   ::-webkit-scrollbar { width: 10px; }
   ::-webkit-scrollbar-track { background: var(--color-ink); }
   ::-webkit-scrollbar-thumb {
-    background: var(--color-line);
+    background: var(--color-dim);
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover { background: var(--color-accent); }
@@ -54,33 +50,64 @@
 
 @layer components {
   .shell {
-    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-8;
   }
 
-  .eyebrow {
-    @apply inline-flex items-center gap-2 rounded-full border border-line bg-raised/70 px-3 py-1
-           font-mono text-[11px] uppercase tracking-[0.18em] text-muted;
+  /* Condensed, heavy, uppercase — the voice of every headline. */
+  .display {
+    font-stretch: 72%;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 0.92;
+    letter-spacing: -0.01em;
   }
 
-  .section-title {
-    @apply text-3xl font-semibold tracking-tight text-white sm:text-4xl;
+  .label {
+    @apply text-[11px] font-semibold uppercase tracking-[0.14em];
   }
 
-  .card {
-    @apply rounded-2xl border border-line bg-raised/60 backdrop-blur-sm transition-colors duration-300;
+  .tag {
+    @apply inline-flex items-center rounded-sm border border-line px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-graphite;
   }
 
-  .card-hover {
-    @apply hover:border-accent/50 hover:bg-raised;
+  .tag-dark {
+    @apply inline-flex items-center rounded-sm border border-line-dark px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-fog;
   }
 
-  .chip {
-    @apply rounded-md border border-line bg-surface px-2 py-1 font-mono text-[11px] text-muted;
+  /* Ring + dot bullet before section headings. */
+  .ring-dot {
+    @apply inline-block h-3.5 w-3.5 shrink-0 rounded-full border-2 border-accent;
   }
+
+  .btn-arrow {
+    @apply inline-flex items-stretch border text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors;
+  }
+  .btn-arrow > .btn-arrow-icon {
+    @apply grid w-9 place-items-center bg-accent text-white transition-colors;
+  }
+  .btn-arrow > .btn-arrow-text {
+    @apply flex items-center px-4 py-2.5;
+  }
+
+  .orb {
+    @apply grid place-items-center rounded-full bg-accent text-center text-[11px] font-semibold uppercase tracking-[0.1em] text-white shadow-[0_10px_40px_-10px_rgba(229,83,45,0.7)] transition-transform duration-300 hover:scale-110;
+  }
+}
+
+/* Scroll reveal — App adds .is-visible when an element enters the viewport. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  [data-reveal] { opacity: 1; transform: none; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

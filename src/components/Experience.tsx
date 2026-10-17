@@ -1,77 +1,96 @@
+import { useState } from 'react';
+import { Plus } from 'react-bootstrap-icons';
 import { experience } from '../data/content';
 
 const Experience = () => {
+  const [open, setOpen] = useState<string | null>(experience[0].company);
+
   return (
-    <section id="experience" className="scroll-mt-24 py-24">
+    <section id="experience" className="scroll-mt-20 bg-paper py-24 sm:py-32">
       <div className="shell">
-        <span className="eyebrow">02 — Experience</span>
-        <h2 className="section-title mt-4">Where I have worked</h2>
-        <p className="mt-4 max-w-2xl text-muted">
-          3.6+ years across product and services teams, shipping React
-          applications used by real customers.
-        </p>
+        <div className="text-center" data-reveal>
+          <h2 className="display inline-flex items-center gap-4 text-[clamp(2.6rem,6vw,5rem)]">
+            <span className="ring-dot" />
+            Where I&apos;ve worked
+          </h2>
+          <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-graphite">
+            4+ years across product, services and contract teams — shipping
+            React applications used by real customers.
+          </p>
+        </div>
 
-        <ol className="mt-14 space-y-4">
-          {experience.map((job) => (
-            <li key={job.company} className="relative pl-8 sm:pl-10">
-              {/* Timeline rail */}
-              <span
-                aria-hidden
-                className="absolute left-0 top-2 h-full w-px bg-line last:hidden"
-              />
-              <span
-                aria-hidden
-                className={`absolute left-0 top-2 h-2.5 w-2.5 -translate-x-[4px] rounded-full ${
-                  job.current
-                    ? 'bg-accent ring-4 ring-accent/20'
-                    : 'bg-line ring-4 ring-ink'
-                }`}
-              />
+        <ul className="mx-auto mt-14 max-w-6xl border-t border-line">
+          {experience.map((job) => {
+            const isOpen = open === job.company;
+            return (
+              <li key={job.company} className="border-b border-line" data-reveal>
+                <button
+                  type="button"
+                  onClick={() => setOpen(isOpen ? null : job.company)}
+                  aria-expanded={isOpen}
+                  className="group grid w-full grid-cols-[1fr_auto] items-center gap-4 py-7 text-left md:grid-cols-[1.1fr_1.6fr_auto_auto] md:gap-10"
+                >
+                  <span className="display text-3xl transition-colors group-hover:text-accent sm:text-4xl">
+                    {job.short}
+                    {job.current && (
+                      <span className="ml-3 inline-block h-2 w-2 -translate-y-2 rounded-full bg-accent align-middle" />
+                    )}
+                  </span>
+                  <span className="hidden text-sm text-graphite md:block">
+                    <span className="font-semibold text-ink">{job.role}</span>
+                    {' · '}
+                    {job.location}
+                  </span>
+                  <span className="hidden text-sm tabular-nums text-graphite md:block">
+                    {job.period}
+                  </span>
+                  <span
+                    className={`grid h-9 w-9 place-items-center rounded-full border transition-all ${
+                      isOpen
+                        ? 'rotate-45 border-accent bg-accent text-white'
+                        : 'border-line text-ink group-hover:border-accent'
+                    }`}
+                  >
+                    <Plus size={18} />
+                  </span>
+                </button>
 
-              <div className="card card-hover p-6 sm:p-7">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <h3 className="text-xl font-semibold text-white">
-                      {job.company}
-                    </h3>
-                    <p className="mt-1 text-sm text-soft">{job.role}</p>
-                  </div>
-                  <div className="text-left sm:text-right">
-                    <p className="inline-flex items-center gap-2 font-mono text-xs text-muted">
-                      {job.current && (
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                      )}
-                      {job.period}
-                    </p>
-                    <p className="mt-1 font-mono text-xs text-muted">
-                      {job.location}
-                    </p>
+                <div
+                  className={`grid transition-[grid-template-rows] duration-500 ${
+                    isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <div className="grid gap-6 pb-9 md:grid-cols-[1.1fr_1.6fr_auto_auto] md:gap-10">
+                      <div className="text-sm text-graphite md:hidden">
+                        <span className="font-semibold text-ink">{job.role}</span> ·{' '}
+                        {job.period}
+                      </div>
+                      <div className="hidden flex-wrap content-start gap-2 md:flex">
+                        {job.stack.map((tech) => (
+                          <span key={tech} className="tag">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                      <ul className="space-y-3 md:col-span-3">
+                        {job.points.map((point) => (
+                          <li
+                            key={point}
+                            className="flex gap-3 text-sm leading-relaxed text-graphite"
+                          >
+                            <span className="mt-2 h-1.5 w-1.5 shrink-0 bg-accent" />
+                            {point}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 </div>
-
-                <ul className="mt-5 space-y-2.5">
-                  {job.points.map((point) => (
-                    <li
-                      key={point}
-                      className="flex gap-3 text-sm leading-relaxed text-muted"
-                    >
-                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {job.stack.map((tech) => (
-                    <span key={tech} className="chip">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </li>
-          ))}
-        </ol>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </section>
   );

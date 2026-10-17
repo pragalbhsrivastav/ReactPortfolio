@@ -1,83 +1,71 @@
-import { Suspense, lazy } from 'react';
-import { ArrowRight, Download, GeoAlt } from 'react-bootstrap-icons';
-import { profile, stats } from '../data/content';
-
-// three.js is heavy — keep it out of the initial bundle.
-const HeroScene = lazy(() => import('./HeroScene'));
+import photo from '../assets/img/profile.jpg';
+import { profile } from '../data/content';
 
 const Banner = () => {
   return (
     <section
       id="home"
-      className="relative flex min-h-screen items-center overflow-hidden pt-28 pb-16"
+      className="relative overflow-hidden bg-ink pt-28 text-white sm:pt-32"
     >
-      <Suspense fallback={null}>
-        <HeroScene />
-      </Suspense>
+      <div className="shell relative">
+        <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr]">
+          <div className="relative z-10 lg:pb-44" data-reveal>
+            <p className="label flex items-center gap-2.5 text-white">
+              <span className="h-2 w-2 bg-accent" />
+              {profile.role} &amp; AI Engineer
+            </p>
 
-      {/* Soft glow behind the headline */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/3 -z-10 h-144 w-144 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/15 blur-[120px]"
-      />
+            <h1 className="display mt-6 text-[clamp(2.9rem,7.4vw,6rem)]">
+              <span className="text-white">Interfaces </span>
+              <span className="text-dim">
+                that ship,
+                <br />
+                scale &amp; think
+                <br />
+                with AI
+              </span>
+            </h1>
 
-      <div className="shell">
-        <div className="max-w-3xl">
-          <span className="eyebrow">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-            Open to opportunities
-          </span>
-
-          <h1 className="mt-6 text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-6xl lg:text-7xl">
-            Hi, I&apos;m {profile.name}.
-            <br />
-            <span className="bg-linear-to-r from-accent via-indigo-400 to-accent-2 bg-clip-text text-transparent">
-              {profile.role}
-            </span>
-          </h1>
-
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
-            {profile.summary}
-          </p>
-
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <a
-              href={profile.resume}
-              target="_blank"
-              rel="noreferrer"
-              className="group inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-medium text-ink transition-opacity hover:opacity-90"
-            >
-              <Download size={15} />
-              Download resume
-            </a>
-            <a
-              href="#work"
-              className="group inline-flex items-center gap-2 rounded-xl border border-line px-5 py-3 text-sm font-medium text-soft transition-colors hover:border-accent/50 hover:text-white"
-            >
-              View my work
-              <ArrowRight
-                size={15}
-                className="transition-transform group-hover:translate-x-0.5"
-              />
-            </a>
-            <span className="inline-flex items-center gap-1.5 px-2 font-mono text-xs text-muted">
-              <GeoAlt size={13} />
-              {profile.location}
-            </span>
+            <p className="mt-7 max-w-md text-sm leading-relaxed text-white/60 sm:text-base">
+              4+ years building production React &amp; TypeScript apps — from
+              enterprise dashboards to AI chat agents. Based in {profile.location}.
+            </p>
           </div>
 
-          <dl className="mt-14 grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4">
-            {stats.map((stat) => (
-              <div key={stat.label}>
-                <dt className="text-2xl font-semibold text-white sm:text-3xl">
-                  {stat.value}
-                </dt>
-                <dd className="mt-1 text-xs leading-snug text-muted">
-                  {stat.label}
-                </dd>
-              </div>
-            ))}
-          </dl>
+          <div className="relative mx-auto aspect-square w-full max-w-[520px] lg:mr-0">
+            {/* Orange orb behind the portrait */}
+            <div className="absolute inset-0 rounded-full bg-linear-to-br from-accent via-accent-deep/80 to-ink" />
+            <div
+              role="img"
+              aria-label={`Portrait of ${profile.fullName}`}
+              className="absolute inset-[7%] rounded-full bg-no-repeat"
+              style={{
+                backgroundImage: `url(${photo})`,
+                backgroundSize: '118% auto',
+                backgroundPosition: '52% 18%',
+              }}
+            />
+            {/* Fade the bottom of the portrait into the page so the name reads */}
+            <div className="absolute inset-[7%] rounded-full bg-linear-to-b from-transparent from-55% to-ink/90" />          </div>
+        </div>
+
+        {/* Giant name, clipped by the bottom of the section */}
+        <div className="relative -mt-10 sm:-mt-20 lg:-mt-36">
+          <h2
+            className="display relative z-10 translate-y-[7%] sm:translate-y-[14%] whitespace-nowrap text-center text-[18.5vw] leading-[0.8] text-white sm:text-[10.6vw] xl:text-[8.6rem]"
+            aria-label={profile.fullName}
+          >
+            <span className="block sm:inline">Pragalbh </span>
+            <span className="block sm:inline">Srivastav</span>
+          </h2>
+          <a
+            href="#contact"
+            className="orb absolute right-2 top-0 z-20 h-24 w-24 -translate-y-1/2 sm:left-[43%] sm:right-auto sm:h-28 sm:w-28"
+          >
+            Hire me
+            <br />
+            now
+          </a>
         </div>
       </div>
     </section>

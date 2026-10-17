@@ -1,105 +1,69 @@
 import { ArrowUpRight } from 'react-bootstrap-icons';
-import { useState } from 'react';
 import ProjectCard from './projectCard';
 import { enterpriseProjects, liveProjects } from '../data/content';
 
-type Tab = 'live' | 'enterprise';
-
 const Projects = () => {
-  const [tab, setTab] = useState<Tab>('live');
-
   return (
-    <section id="work" className="scroll-mt-24 py-24">
+    <section id="work" className="scroll-mt-20 bg-paper py-24 sm:py-32">
       <div className="shell">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <span className="eyebrow">04 — Work</span>
-            <h2 className="section-title mt-4">Selected projects</h2>
-          </div>
-
-          <div
-            role="tablist"
-            aria-label="Project category"
-            className="flex gap-1 rounded-xl border border-line bg-raised/60 p-1"
-          >
-            {(
-              [
-                ['live', 'Live sites'],
-                ['enterprise', 'Enterprise'],
-              ] as const
-            ).map(([key, label]) => (
-              <button
-                key={key}
-                role="tab"
-                type="button"
-                aria-selected={tab === key}
-                onClick={() => setTab(key)}
-                className={`rounded-lg px-4 py-2 text-sm transition-colors ${
-                  tab === key
-                    ? 'bg-white text-ink'
-                    : 'text-muted hover:text-soft'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+        <div className="flex flex-wrap items-end justify-between gap-6" data-reveal>
+          <h2 className="display flex items-center gap-4 text-[clamp(2.6rem,6vw,5rem)]">
+            <span className="ring-dot" />
+            Selected works
+          </h2>
+          <p className="max-w-xs text-sm leading-relaxed text-graphite">
+            Live products I&apos;ve built or shipped features for. Click through
+            to see them in production.
+          </p>
         </div>
 
-        {tab === 'live' ? (
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {liveProjects.map((project) => (
-              <ProjectCard key={project.title} {...project} />
-            ))}
-          </div>
-        ) : (
-          <div className="mt-12 grid gap-5 sm:grid-cols-2">
-            {enterpriseProjects.map((project) => (
-              <article
-                key={project.title}
-                className="card card-hover flex flex-col p-6"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  {project.link ? (
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="group/link inline-flex items-center gap-1.5 font-semibold text-white transition-colors hover:text-accent"
-                    >
-                      {project.title}
-                      <ArrowUpRight
-                        size={13}
-                        className="shrink-0 opacity-0 transition-opacity group-hover/link:opacity-100"
-                      />
-                    </a>
-                  ) : (
-                    <h3 className="font-semibold text-white">{project.title}</h3>
-                  )}
-                  <span className="shrink-0 font-mono text-[11px] text-muted">
-                    {project.org}
-                  </span>
-                </div>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
-                  {project.blurb}
-                </p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {project.stack.map((tech) => (
-                    <span key={tech} className="chip">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </article>
-            ))}
-          </div>
-        )}
+        <div className="mt-14 grid gap-x-8 gap-y-14 md:grid-cols-2">
+          {liveProjects.map((project, i) => (
+            <ProjectCard
+              key={project.title}
+              index={i + 1}
+              featured={i === 0}
+              {...project}
+            />
+          ))}
+        </div>
 
-        {tab === 'enterprise' && (
-          <p className="mt-6 text-xs text-muted">
-            Internal platforms — source and live links are not public unless shown.
-          </p>
-        )}
+        <div className="mt-28" data-reveal>
+          <div className="flex flex-wrap items-baseline justify-between gap-4">
+            <h3 className="display text-4xl sm:text-5xl">Enterprise platforms</h3>
+            <span className="tag">Internal — not public</span>
+          </div>
+          <ul className="mt-8 border-t border-line">
+            {enterpriseProjects.map((project) => (
+              <li
+                key={project.title}
+                className="grid gap-3 border-b border-line py-7 md:grid-cols-[1.2fr_2fr_auto] md:items-baseline md:gap-10"
+              >
+                <div>
+                  <p className="display text-2xl sm:text-3xl">{project.title}</p>
+                  <p className="label mt-2 text-accent">{project.org}</p>
+                </div>
+                <div>
+                  <p className="text-sm leading-relaxed text-graphite">
+                    {project.blurb}
+                  </p>
+                  <p className="mt-3 text-xs text-graphite/80">
+                    {project.stack.join(' · ')}
+                  </p>
+                </div>
+                <span className="text-sm tabular-nums text-graphite">
+                  {project.year}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <a
+            href="#ai"
+            className="label mt-8 inline-flex items-center gap-2 text-ink transition-colors hover:text-accent"
+          >
+            Looking for AI work? <ArrowUpRight size={12} />
+          </a>
+        </div>
       </div>
     </section>
   );

@@ -1,71 +1,44 @@
 import { useEffect, useState } from 'react';
-import { Github, Linkedin, List, X } from 'react-bootstrap-icons';
-import { navLinks, profile } from '../data/content';
+import { ArrowRight, List, X } from 'react-bootstrap-icons';
+import { navLinks } from '../data/content';
 
 export const NavBar: React.FC = () => {
-  const [activeLink, setActiveLink] = useState('home');
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  // Highlight the nav item for whichever section is currently in view.
-  useEffect(() => {
-    const sections = navLinks
-      .map((l) => document.getElementById(l.id))
-      .filter((el): el is HTMLElement => el !== null);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) setActiveLink(visible.target.id);
-      },
-      { rootMargin: '-45% 0px -45% 0px', threshold: [0, 0.25, 0.5, 1] }
-    );
-
-    sections.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
   }, []);
 
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'border-b border-line bg-ink/80 py-3 backdrop-blur-xl'
-          : 'border-b border-transparent py-5'
+        scrolled || menuOpen
+          ? 'bg-ink/90 py-3 shadow-[0_1px_0_0_#333] backdrop-blur-xl'
+          : 'bg-transparent py-6'
       }`}
     >
       <nav className="shell flex items-center justify-between">
-        <a href="#home" className="group flex items-center gap-2.5">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-linear-to-br from-accent to-accent-2 font-mono text-sm font-bold text-white">
-            P
-          </span>
-          <span className="font-mono text-sm tracking-tight text-white">
-            pragalbh<span className="text-accent">.dev</span>
-          </span>
+        <a
+          href="#home"
+          className="display text-2xl tracking-tight text-white"
+          aria-label="Pragalbh — home"
+        >
+          Pr<span className="text-accent">a</span>galbh
+          <span className="text-accent">.</span>
         </a>
 
-        <ul className="hidden items-center gap-1 md:flex">
+        <ul className="hidden items-center gap-10 md:flex">
           {navLinks.map((link) => (
             <li key={link.id}>
               <a
                 href={`#${link.id}`}
-                className={`rounded-lg px-3.5 py-2 text-sm transition-colors ${
-                  activeLink === link.id
-                    ? 'text-white'
-                    : 'text-muted hover:text-soft'
-                }`}
+                className="label relative text-white/85 transition-colors hover:text-accent"
               >
                 {link.label}
-                {activeLink === link.id && (
-                  <span className="mx-auto mt-1 block h-px w-4 bg-accent" />
-                )}
               </a>
             </li>
           ))}
@@ -73,52 +46,35 @@ export const NavBar: React.FC = () => {
 
         <div className="flex items-center gap-2">
           <a
-            href={profile.linkedin}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="LinkedIn"
-            className="grid h-9 w-9 place-items-center rounded-lg border border-line text-muted transition-colors hover:border-accent/50 hover:text-white"
-          >
-            <Linkedin size={15} />
-          </a>
-          <a
-            href={profile.github}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub"
-            className="grid h-9 w-9 place-items-center rounded-lg border border-line text-muted transition-colors hover:border-accent/50 hover:text-white"
-          >
-            <Github size={15} />
-          </a>
-          <a
             href="#contact"
-            className="hidden rounded-lg bg-white px-4 py-2 text-sm font-medium text-ink transition-opacity hover:opacity-90 sm:block"
+            className="btn-arrow group hidden border-line-dark text-white hover:border-accent sm:inline-flex"
           >
-            Get in touch
+            <span className="btn-arrow-icon">
+              <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
+            </span>
+            <span className="btn-arrow-text">Let&apos;s talk</span>
           </a>
           <button
             type="button"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
-            className="grid h-9 w-9 place-items-center rounded-lg border border-line text-soft md:hidden"
+            className="grid h-10 w-10 place-items-center border border-line-dark text-white md:hidden"
           >
-            {menuOpen ? <X size={18} /> : <List size={18} />}
+            {menuOpen ? <X size={20} /> : <List size={20} />}
           </button>
         </div>
       </nav>
 
       {menuOpen && (
-        <div className="shell mt-3 md:hidden">
-          <ul className="card divide-y divide-line overflow-hidden">
+        <div className="shell md:hidden">
+          <ul className="mt-4 divide-y divide-line-dark border-t border-line-dark">
             {navLinks.map((link) => (
               <li key={link.id}>
                 <a
                   href={`#${link.id}`}
                   onClick={() => setMenuOpen(false)}
-                  className={`block px-4 py-3 text-sm ${
-                    activeLink === link.id ? 'text-white' : 'text-muted'
-                  }`}
+                  className="display block py-4 text-3xl text-white"
                 >
                   {link.label}
                 </a>
