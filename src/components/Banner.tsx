@@ -58,14 +58,6 @@ const Banner = () => {
             <span className="block sm:inline">Pragalbh </span>
             <span className="block sm:inline">Srivastav</span>
           </h2>
-          <a
-            href="#contact"
-            className="orb absolute right-2 top-0 z-20 h-24 w-24 -translate-y-1/2 sm:left-[43%] sm:right-auto sm:h-28 sm:w-28"
-          >
-            Hire me
-            <br />
-            now
-          </a>
         </div>
       </div>
     </section>
